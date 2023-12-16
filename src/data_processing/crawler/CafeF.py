@@ -5,7 +5,7 @@ import requests
 
 import pandas as pd
 
-from crawler.common import CafefCommon
+from src.data_processing.crawler.common import CafefCommon
 
 class HistoricalPriceCafef():
     '''Crawl historical price from CafeF'''

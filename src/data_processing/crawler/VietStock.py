@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 
-from crawler.common import VietStockCommon
+from src.data_processing.crawler.common import VietStockCommon
 
 
 class VietStock():

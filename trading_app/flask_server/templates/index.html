@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+    <h1>Stock Price Dashboard</h1>
+
+    <div>
+        <h2>Choose Stock Symbol</h2>
+        <form>
+            <label for="symbol">Select Symbol:</label>
+            <select name="symbol" id="symbol">
+                {% for symbol in symbols %}
+                <option value="{{ symbol }}">{{ symbol }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Show Data</button>
+        </form>
+    </div>
+
+    <div id="data-display">
+        <!-- Display the data below the button -->
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function (event) {
+                event.preventDefault();
+                var selectedSymbol = $("#symbol").val();
+                $.ajax({
+                    url: "/symbol_data",
+                    type: "POST",
+                    data: { symbol: selectedSymbol },
+                    success: function (response) {
+                        $("#data-display").html(response);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
