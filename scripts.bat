@@ -36,8 +36,8 @@ if "%~1"=="--help" (
             python .\scripts\run_init_folder.py
             python .\scripts\run_crawl_listing_companies.py
             python .\scripts\run_crawl_prices.py
-            python .\scripts\run_train_model.py
             python .\scripts\run_transform_prices.py
+            python .\scripts\run_train_model.py
         ) else (
             echo Invalid argument: !option!
         )  
