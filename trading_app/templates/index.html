@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Price Dashboard</title>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 </head>
 
 <body>
@@ -25,7 +27,7 @@
     </div>
 
     <div id="data-display">
-        <!-- Display the data below the button -->
+
     </div>
 
     <script>
@@ -38,7 +40,9 @@
                     type: "POST",
                     data: { symbol: selectedSymbol },
                     success: function (response) {
-                        $("#data-display").html(response);
+                        var data = response.first_ten_rows;
+                        var prediction = response.prediction;
+                        $("#data-display").html(data + "<br><strong>Prediction:</strong> " + prediction);
                     },
                     error: function (error) {
                         console.log(error);
@@ -47,6 +51,8 @@
             });
         });
     </script>
+
+
 </body>
 
 </html>

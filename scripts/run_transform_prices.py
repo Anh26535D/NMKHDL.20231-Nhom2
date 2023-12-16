@@ -11,7 +11,7 @@ logging.basicConfig(
 
 import pandas as pd
 from tqdm import tqdm
-from src.data_processing.transformer import IdentityTransformer
+from src.data_processing.transformer import NameTransformer
 
 RAW_PATH = 'data/raw/prices'
 PROCESSED_PATH = 'data/processed/prices'
@@ -19,7 +19,7 @@ PROCESSED_PATH = 'data/processed/prices'
 if __name__ == '__main__':
     print('[START >>] Transforming prices...')
     filenames = os.listdir(RAW_PATH)
-    transformer = IdentityTransformer.IdentityTransformer()
+    transformer = NameTransformer.NameTransformer()
     for filename in tqdm(filenames, total=len(filenames)):
         try:
             data = pd.read_csv(os.path.join(RAW_PATH, filename))
