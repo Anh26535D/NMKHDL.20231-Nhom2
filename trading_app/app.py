@@ -2,12 +2,11 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from datetime import datetime
-import re
 
-from flask import Flask, render_template, request, jsonify
-import pandas as pd
+from flask import Flask, render_template, Response, stream_with_context
 
 from src.model_training.trainer import RandomModel
+from trading_app.app_utils import DataGenerator
 
 app = Flask(__name__)
 
@@ -45,19 +44,14 @@ def predict(model, data):
     prediction = model.predict(data)
     return prediction
 
-@app.route('/symbol_data', methods=['GET', 'POST'])
-def symbol_data():
-    selected_symbol = request.form.get('symbol')
-    filepath = f'data/processed/prices/{selected_symbol}.csv'
-    
-    try:
-        df = pd.read_csv(filepath)
-        first_ten_rows = df.head(10).to_html(index=False)
-        loaded_model = load_model()
-        prediction = predict(loaded_model, df).tolist()
-        return jsonify(first_ten_rows=first_ten_rows, prediction=prediction)
-    except FileNotFoundError:
-        return jsonify(error="Data not available for the selected symbol.")
+@app.route('/chart-data/<symbol>')
+def chart_data(symbol):
+    filepath = f'data/processed/prices/{symbol}.csv'
+    gendata = DataGenerator.DataGenerators(filepath)
+    response = Response(stream_with_context(gendata.run()), mimetype="text/event-stream")
+    response.headers["Cache-Control"] = "no-cache"
+    response.headers["X-Accel-Buffering"] = "no"
+    return response
 
 @app.route('/')
 def home():
