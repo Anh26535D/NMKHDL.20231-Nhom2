@@ -92,8 +92,9 @@
                     }
                 };
                 console.log("Select symbol:", selectedSymbol);
+                document.getElementById('canvas').innerHTML = '';
                 const context = document.getElementById('canvas').getContext('2d');
-                const lineChart = new Chart(context, config);
+                var lineChart = new Chart(context, config);
 
                 const source = new EventSource(`/chart-data/${selectedSymbol}`);
 
