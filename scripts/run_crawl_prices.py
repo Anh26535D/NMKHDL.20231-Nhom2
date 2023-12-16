@@ -15,7 +15,7 @@ PRICES_PATH = 'data/raw/prices'
 if __name__ == '__main__':
     print('[START >>] Crawling prices...')
     companies = pd.read_csv(LIST_COMPANIES_PATH)
-    symbols = companies['symbol'].values[:5]
+    symbols = companies['symbol'].values
 
     crawler = CafeF.HistoricalPriceCafef()
     for symbol in tqdm(symbols, total=len(symbols)):

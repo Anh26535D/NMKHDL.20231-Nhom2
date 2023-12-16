@@ -9,7 +9,7 @@ class RandomModel:
         pass
 
     def predict(self, X):
-        return np.random.randint(0, 2, size=(len(X), 1))
+        return np.random.randint(0, 2)
     
     def save_model(self, save_path):
         joblib.dump(self, save_path)

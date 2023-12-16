@@ -5,7 +5,6 @@ from datetime import datetime
 
 from flask import Flask, render_template, Response, stream_with_context
 
-from src.model_training.trainer import RandomModel
 from trading_app.app_utils import DataGenerator
 
 app = Flask(__name__)
@@ -35,19 +34,15 @@ def get_latest_model_path(root_path):
 
     return latest_model_path
 
-def load_model():
-    model_path = get_latest_model_path(root_path='trading_app/model')
-    loaded_model = RandomModel.load_model(model_path)
-    return loaded_model
-
-def predict(model, data):
-    prediction = model.predict(data)
-    return prediction
 
 @app.route('/chart-data/<symbol>')
 def chart_data(symbol):
-    filepath = f'data/processed/prices/{symbol}.csv'
-    gendata = DataGenerator.DataGenerators(filepath)
+    file_path = f'data/processed/prices/{symbol}.csv'
+    model_path = get_latest_model_path(root_path='trading_app/model')
+    gendata = DataGenerator.DataGenerators(
+        file_path=file_path,
+        model_path=model_path,
+    )
     response = Response(stream_with_context(gendata.run()), mimetype="text/event-stream")
     response.headers["Cache-Control"] = "no-cache"
     response.headers["X-Accel-Buffering"] = "no"
