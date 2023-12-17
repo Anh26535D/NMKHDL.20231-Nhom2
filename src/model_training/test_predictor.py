@@ -1,9 +1,10 @@
 import sys
 import os
+import joblib
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.abspath(os.path.join(current_script_dir, '..', '..')))
-import joblib
 
+import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
@@ -14,7 +15,7 @@ class Predictor:
     def __init__(
             self, 
             model_path,
-            window_size = 20,
+            window_size,
         ) -> None:
         self.model = joblib.load(model_path)
         self.window_size = window_size
@@ -42,7 +43,27 @@ class Predictor:
             real_trend = scaled_parameters[0],
             minmax_scaler = self.scaler
         )
+        self.is_setup = True
     
     def predict(self, data):
         """Predict the next action based on the data (Close, Volume)"""
-        return self.agent.trade([data['Close'],  data['MatchedVolume']])
+        if not self.is_setup:
+            self.setup_agent(data)
+
+        return self.agent.trade([data[0], data[1]])
+
+window_size = 20
+model_path = 'trading_app/model/model_2023-12-17.pkl'
+data_path = 'data/processed/prices/A32.csv'
+df = pd.read_csv(data_path)[::-1]
+data_setup = df.head(100)
+
+predictor = Predictor(
+    model_path=model_path,
+    window_size=window_size,
+)
+predictor.setup_agent(data_setup)
+for i in range(100, df.shape[0]):
+    data = df.iloc[i]
+    prediction = predictor.predict([data['Close'], data['MatchedVolume']])
+    print(prediction)

@@ -49,14 +49,15 @@
                 labels: [],
                 datasets: [{
                     label: "Close",
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgb(3, 119, 252)',
+                    borderColor: 'rgb(3, 119, 252)',
                     data: [],
                     fill: false,
                     pointBackgroundColor: [],
                     pointBorderColor: [],
                     pointStyle: [],
                     pointRotation: [],
+                    pointRadius: [],
                 }],
             },
             options: {
@@ -94,6 +95,7 @@
         document.getElementById('canvas').innerHTML = '';
         const context = document.getElementById('canvas').getContext('2d');
         var lineChart = new Chart(context, config);
+        var source;
 
         $(document).ready(function () {
             $("form").submit(function (event) {
@@ -102,12 +104,15 @@
                 config.data.datasets[0].pointBorderColor = [];
                 config.data.datasets[0].pointStyle = [];
                 config.data.datasets[0].pointRotation = [];
+                config.data.datasets[0].pointRadius = [];
                 config.data.labels = [];
+                if (source) {
+                    source.close();
+                }
 
                 event.preventDefault();
                 var selectedSymbol = $("#symbol").val();
-                console.log("Select symbol:", selectedSymbol);
-                const source = new EventSource(`/chart-data/${selectedSymbol}`);
+                source = new EventSource(`/chart-data/${selectedSymbol}`);
 
                 source.onmessage = function (event) {
                     const data = JSON.parse(event.data);
@@ -119,6 +124,7 @@
                         config.data.datasets[0].pointBorderColor.shift();
                         config.data.datasets[0].pointStyle.shift();
                         config.data.datasets[0].pointRotation.shift();
+                        config.data.datasets[0].pointRadius.shift();
                     }
 
                     config.data.labels.push(data.Date);
@@ -129,16 +135,19 @@
                         config.data.datasets[0].pointBorderColor.push('green');
                         config.data.datasets[0].pointStyle.push('triangle');
                         config.data.datasets[0].pointRotation.push(0);
+                        config.data.datasets[0].pointRadius.push(10);
                     } else if (data.Prediction === 1) { // Sell signal
-                        config.data.datasets[0].pointBackgroundColor.push('black');
-                        config.data.datasets[0].pointBorderColor.push('black');
-                        config.data.datasets[0].pointStyle.push('triangle');
-                        config.data.datasets[0].pointRotation.push(180);
-                    } else {
                         config.data.datasets[0].pointBackgroundColor.push('red');
                         config.data.datasets[0].pointBorderColor.push('red');
+                        config.data.datasets[0].pointStyle.push('triangle');
+                        config.data.datasets[0].pointRotation.push(180);
+                        config.data.datasets[0].pointRadius.push(10);
+                    } else {
+                        config.data.datasets[0].pointBackgroundColor.push('rgb(3, 119, 252)');
+                        config.data.datasets[0].pointBorderColor.push('rgb(3, 119, 252)');
                         config.data.datasets[0].pointStyle.push('circle');
                         config.data.datasets[0].pointRotation.push(0);
+                        config.data.datasets[0].pointRadius.push(6);
                     }
 
                     lineChart.update();

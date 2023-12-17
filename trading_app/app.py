@@ -34,16 +34,18 @@ def get_latest_model_path(root_path):
 
     return latest_model_path
 
-
+generators = {}
 @app.route('/chart-data/<symbol>')
 def chart_data(symbol):
     file_path = f'data/processed/prices/{symbol}.csv'
     model_path = get_latest_model_path(root_path='trading_app/model')
-    gendata = DataGenerator.DataGenerators(
+    for k in generators.keys():
+        generators[k].stop()
+    generators[symbol] = DataGenerator.DataGenerators(
         file_path=file_path,
         model_path=model_path,
     )
-    response = Response(stream_with_context(gendata.run()), mimetype="text/event-stream")
+    response = Response(stream_with_context(generators[symbol].run()), mimetype="text/event-stream")
     response.headers["Cache-Control"] = "no-cache"
     response.headers["X-Accel-Buffering"] = "no"
     return response
@@ -54,4 +56,4 @@ def home():
     return render_template('index.html', symbols=symbols)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5111)
