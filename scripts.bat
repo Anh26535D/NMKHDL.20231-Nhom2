@@ -33,11 +33,11 @@ if "%~1"=="--help" (
         ) else if "!option!"=="transform_prices" (
             python .\scripts\run_transform_prices.py
         ) else if "!option!"=="all" (
+            python .\scripts\run_init_folder.py
             python .\scripts\run_crawl_listing_companies.py
             python .\scripts\run_crawl_prices.py
-            python .\scripts\run_init_folder.py
-            python .\scripts\run_train_model.py
             python .\scripts\run_transform_prices.py
+            python .\scripts\run_train_model.py
         ) else (
             echo Invalid argument: !option!
         )  
