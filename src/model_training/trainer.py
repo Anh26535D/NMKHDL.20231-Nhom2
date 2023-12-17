@@ -5,8 +5,13 @@ import numpy as np
 class Deep_Evolution_Strategy:
 
     def __init__(
-        self, weights, reward_function, population_size, sigma, learning_rate
-    ):
+        self, 
+        weights, 
+        reward_function, 
+        population_size, 
+        sigma, 
+        learning_rate
+    ) -> None:
         self.weights = weights
         self.reward_function = reward_function
         self.population_size = population_size
