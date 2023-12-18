@@ -12,6 +12,7 @@ if [ "$1" == "--help" ]; then
     echo "   init_folder         Run the init folder script"
     echo "   train_model         Run the train model script"
     echo "   transform_prices    Run the transform prices script"
+    echo "   stream_data         Run the stream data script"
     echo "   all                 Run all scripts"
     echo
 else
@@ -34,6 +35,9 @@ else
                 ;;
             transform_prices)
                 python3 ./scripts/run_transform_prices.py
+                ;;
+            stream_data)
+                python3 ./scripts/run_crawl_stream_data.py
                 ;;
             all)
                 python3 ./scripts/run_init_folder.py

@@ -14,6 +14,7 @@ if "%~1"=="--help" (
     echo   init_folder       Run the init folder script
     echo   train_model       Run the train model script
     echo   transform_prices  Run the transform prices script
+    echo   stream_data       Run the stream data script
     echo   all               Run all scripts
     echo.
 ) else (
@@ -32,6 +33,9 @@ if "%~1"=="--help" (
             python .\scripts\run_train_model.py
         ) else if "!option!"=="transform_prices" (
             python .\scripts\run_transform_prices.py
+        ) else if "!option!"=="stream_data" (
+            @echo off
+            python .\scripts\run_crawl_stream_data.py  %2 %3
         ) else if "!option!"=="all" (
             python .\scripts\run_init_folder.py
             python .\scripts\run_crawl_listing_companies.py

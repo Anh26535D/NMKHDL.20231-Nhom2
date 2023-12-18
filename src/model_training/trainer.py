@@ -41,7 +41,7 @@ class Deep_Evolution_Strategy:
         start_time = time.time()
         for i in range(epoch):
             population = self.init_population()
-            
+
             # Calculate reward for each solution
             rewards = np.zeros(self.population_size)
             for idx, individual in enumerate(population):
